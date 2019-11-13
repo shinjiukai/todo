@@ -26,6 +26,7 @@ class EditTask extends CreateTask
                 'status' => '状態',
             ];
     }
+
     public function messages()
     {
         $messages = parent::messages();

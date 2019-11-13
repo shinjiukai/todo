@@ -15,7 +15,7 @@ class TaskTest extends TestCase
     /**
      * 各テストメソッドの実行前に呼ばれる
      */
-    public function setUp()
+    public function setUp():void
     {
         parent::setUp();
 
@@ -27,7 +27,7 @@ class TaskTest extends TestCase
      * 期限日が日付ではない場合はバリデーションエラー
      * @test
      */
-    public function due_date_should_be_date()
+/*    public function due_date_should_be_date()
     {
         $response = $this->post('/folders/1/tasks/create', [
             'title' => 'Sample task',
@@ -38,12 +38,12 @@ class TaskTest extends TestCase
             'due_date' => '期限日 には日付を入力してください。',
         ]);
     }
-
+*/
     /**
      * 期限日が過去日付の場合はバリデーションエラー
      * @test
      */
-    public function due_date_should_not_be_past()
+ /*   public function due_date_should_not_be_past()
     {
         $response = $this->post('/folders/1/tasks/create', [
             'title' => 'Sample task',
@@ -54,4 +54,23 @@ class TaskTest extends TestCase
             'due_date' => '期限日 には今日以降の日付を入力してください。',
         ]);
     }
+*/
+    public function status_should_be_within_defined_numbers()
+    {
+        $this->seed('TasksTableSeeder');
+
+        $response = $this->post('/folders/1/tasks/1/edit', [
+            'title' => 'Sample task',
+            'due_date' => Carbon::today()->format('Y/m/d'),
+            'status' => 999,
+        ]);
+
+        $response->assertSessionHasErrors([
+            'status' => '状態 には 未着手、着手中、完了 のいずれかを指定してください。',
+        ]);
+    }
+
+
+
+
 }
